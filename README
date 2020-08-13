@@ -1,0 +1,7 @@
+From the project folder run:
+
+mkdir build
+cd build
+cmake ../
+make
+source ./tests/plot.sh
