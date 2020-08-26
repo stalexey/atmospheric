@@ -34,3 +34,16 @@ sampleAdiabaticTemperature(const T height, const T gamma)
     const T pressureScale = samplePressure(height) / SEA_LEVEL_PRESSURE;
     return SEA_LEVEL_TEMPERATURE * std::pow(pressureScale, (gamma - 1.0f) / gamma);
 }
+
+static constexpr double WATER_TRIPLE_POINT_TEMPERATURE = 273.16;
+static constexpr double WATER_TRIPLE_POINT_PRESSURE = 611.2;
+static constexpr double MOLAR_WATER_VAPOR_LATENT_HEAT = 43988.0;
+
+template <class T>
+T
+saturatedWaterVaporPressure(const T temperature)
+{
+    return WATER_TRIPLE_POINT_PRESSURE *
+           std::exp(
+               -MOLAR_WATER_VAPOR_LATENT_HEAT / R * (1 / temperature - 1 / WATER_TRIPLE_POINT_TEMPERATURE));
+}

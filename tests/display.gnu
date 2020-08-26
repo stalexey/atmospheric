@@ -7,4 +7,5 @@ replot 'ambientTemperature.dat' lw 2
 replot 'adiabaticDryTemperature.dat' lw 2
 replot 'adiabaticWetTemperature.dat' lw 2
 replot 'ambientConcentration.dat' lw 2
+replot 'saturatedVaporPressure.dat' lw 2
 pause -1

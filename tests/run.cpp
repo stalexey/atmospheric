@@ -37,15 +37,20 @@ main()
     GridData<T> adiabaticDryTemperatureData(grid);
     GridData<T> adiabaticWetTemperatureData(grid);
     GridData<T> ambientConcentrationData(grid);
+    GridData<T> saturatedVaporPressureData(grid);
 
 #pragma omp parallel for
     for (int i = 0; i < grid.samples(); ++i) {
         const T height = grid.position(i);
         ambientTemperatureData[i] = sampleTemperature(height) / SEA_LEVEL_TEMPERATURE;
         ambientPressureData[i] = samplePressure(height) / SEA_LEVEL_PRESSURE;
-        adiabaticDryTemperatureData[i] = sampleAdiabaticTemperature(height, AIR_GAMMA) / SEA_LEVEL_TEMPERATURE;
-        adiabaticWetTemperatureData[i] = sampleAdiabaticTemperature(height, VAPOR_GAMMA) / SEA_LEVEL_TEMPERATURE;
+        adiabaticDryTemperatureData[i] =
+            sampleAdiabaticTemperature(height, AIR_GAMMA) / SEA_LEVEL_TEMPERATURE;
+        adiabaticWetTemperatureData[i] =
+            sampleAdiabaticTemperature(height, VAPOR_GAMMA) / SEA_LEVEL_TEMPERATURE;
         ambientConcentrationData[i] = ambientPressureData[i] / ambientTemperatureData[i];
+        saturatedVaporPressureData[i] = saturatedWaterVaporPressure(sampleTemperature(height)) /
+                          saturatedWaterVaporPressure(SEA_LEVEL_TEMPERATURE);
     }
 
     saveData(ambientTemperatureData, "ambientTemperature");
@@ -53,6 +58,7 @@ main()
     saveData(adiabaticDryTemperatureData, "adiabaticDryTemperature");
     saveData(adiabaticWetTemperatureData, "adiabaticWetTemperature");
     saveData(ambientConcentrationData, "ambientConcentration");
+    saveData(saturatedVaporPressureData, "saturatedVaporPressure");
 
     return 0;
 }
